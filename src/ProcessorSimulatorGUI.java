@@ -30,142 +30,137 @@ public class ProcessorSimulatorGUI{
 	private static JTextArea memoryArea;
 	private static JScrollPane scrollingArea;
 
-
-
 	public ProcessorSimulatorGUI(){
-
 		// Instance fields declaration
 		jcomp = new JComponent[15];
 		jtcomp = new JTextComponent[14];
-		panel = new JPanel[4];
+		panel = new JPanel[7];
 		mainPanel = new JPanel();
 		memoryArea = new JTextArea(6, 15);
 		scrollingArea = new JScrollPane(memoryArea);
 
 		// Labels
-		jcomp[0] = new JLabel ("IR");
-		jcomp[1] = new JLabel ("PC");
-		jcomp[2] = new JLabel ("A");
-		jcomp[3] = new JLabel ("R0");
-		jcomp[4] = new JLabel ("R1");
-		jcomp[5] = new JLabel ("R2");
-		jcomp[6] = new JLabel ("R3");
-		jcomp[7] = new JLabel ("R4");
-		jcomp[8] = new JLabel ("R5");
-		jcomp[9] = new JLabel ("R6");
-		jcomp[10] = new JLabel ("R7");
-		jcomp[11] = new JLabel("SR");
-		jcomp[12] = new JLabel("Keyboard");
-		jcomp[13] = new JLabel("Display");
-		jcomp[14] = new JLabel("Memory");
+		jcomp[0] = new JLabel ("IR: ");
+		jcomp[1] = new JLabel ("PC: ");
+		jcomp[2] = new JLabel ("A: ");
+		jcomp[3] = new JLabel ("R0: ");
+		jcomp[4] = new JLabel ("R1: ");
+		jcomp[5] = new JLabel ("R2: ");
+		jcomp[6] = new JLabel ("R3: ");
+		jcomp[7] = new JLabel ("R4: ");
+		jcomp[8] = new JLabel ("R5: ");
+		jcomp[9] = new JLabel ("R6: ");
+		jcomp[10] = new JLabel ("R7: ");
+		jcomp[11] = new JLabel("SR: ");
+		jcomp[12] = new JLabel("Keyboard: ");
+		jcomp[13] = new JLabel("Display: ");
+		jcomp[14] = new JLabel("Memory: ");
 
-
-		// Filling text fields
-		for(int i = 0 ; i <=13; i++)
-		{			
+		// Initializing each text field
+		for(int i = 0 ; i <=13; i++) {			
 			jtcomp[i] = new JTextField("0000000");
 			jtcomp[i].setForeground(Color.DARK_GRAY);
 			jtcomp[i].setEditable(false);
 		}
 
-		// creating panels
-		for (int k = 0; k <= 3; k++) {
-			panel[k] = new JPanel();
+		// Initializing each panel
+		for (int i = 0; i < panel.length; i++) {
+			panel[i] = new JPanel();
 		}
 
 		// Main panel
-		GridLayout mainLayout = new GridLayout(1, 2, 40, 20);
+		GridLayout mainLayout = new GridLayout(1, 2, 20, 0);
 		mainPanel.setLayout (mainLayout);
 		mainPanel.setBackground(Color.DARK_GRAY);
 
-		// Grid Layout - West of Main Panel
-		GridLayout grid1 = new GridLayout(11, 2, 0, 0);  // row, column, hgap, vgap
+		// Grid layout (main panel west)
+		GridLayout grid1 = new GridLayout(11, 2, 0, 0);  
 		panel[0].setLayout(grid1);
 		panel[0].setBackground(Color.DARK_GRAY);
 		mainPanel.add(panel[0]);
 
-		// Border Layout
+		// Border layout
 		BorderLayout border1 = new BorderLayout();
 		panel[1].setLayout(border1);
 		panel[1].setBackground(Color.DARK_GRAY);
 		mainPanel.add(panel[1]);
 
-		// Adding a (NORTH) panel to the Main East Panel
+		// North panel to the east main panel
 		GridLayout grid2 = new GridLayout(3, 2, 1 , 1);
 		panel[2].setLayout(grid2);
 		panel[2].setBackground(Color.DARK_GRAY);
 		panel[1].add(panel[2], BorderLayout.NORTH);
 
-		// Main Panel Border
 		Border etched = BorderFactory.createEtchedBorder();
 		Border titled = BorderFactory.createTitledBorder(etched);
 		mainPanel.setBorder(titled);
 
 
-		// Components of grid layout (west of main)
-		for(int l = 0; l <= 10; l++){
-			panel[0].add(jcomp[l]);
-			panel[0].add(jtcomp[l]);
+		// Adding each of the grid components (west)
+		for (int i = 0; i <= 10; i++){
+			panel[0].add(jcomp[i]);
+			panel[0].add(jtcomp[i]);
 		}
 
-		// Components of grid layout (north of panel[1])
-		for(int m = 11; m <=13 ; m++){
-			panel[2].add(jcomp[m]);
-			panel[2].add(jtcomp[m]);
+		// Adding each of the grid components (north)
+		for (int i = 11; i <=13 ; i++){
+			panel[2].add(jcomp[i]);
+			panel[2].add(jtcomp[i]);
 		}
 
-
-		// Memorys Panel
+		// Memory 
 		BorderLayout border2 = new BorderLayout();
 		panel[3].setLayout(border2);
 		panel[1].add(panel[3], BorderLayout.CENTER);
 		panel[3].add(jcomp[14], BorderLayout.NORTH);
-		panel[3].add(scrollingArea, BorderLayout.CENTER);
+		panel[3].add(scrollingArea, BorderLayout.EAST);
+		panel[3].add(panel[5], BorderLayout.WEST);
 		panel[3].setBackground(Color.DARK_GRAY);
 
 		memoryArea.setEditable(false);
 		memoryArea.setForeground(Color.DARK_GRAY);
 		memoryArea.setBackground(Color.WHITE);
 
-
-		// JButtons for RUN & STEP
 		final JButton run = new JButton("RUN");
 		final JButton step = new JButton("STEP");
 
-		panel[1].add(step, BorderLayout.SOUTH);
-		panel[3].add(run, BorderLayout.SOUTH);
+		// Positioning buttons in GUI
+		GridLayout grid3 = new GridLayout(2, 1, 0, 0);  
+		panel[5].setLayout(grid3);
+		panel[5].add(panel[6], BorderLayout.NORTH);
+		panel[5].add(panel[4], BorderLayout.SOUTH);
+		panel[5].setBackground(Color.DARK_GRAY);
+		panel[6].setBackground(Color.DARK_GRAY);
+		panel[4].setLayout(grid3);
+		panel[4].add(run, BorderLayout.NORTH);
+		panel[4].add(step, BorderLayout.SOUTH);
+		panel[4].setBackground(Color.DARK_GRAY);
 
-
-
-		// Frame
-		frame = new JFrame ("Processor Simulator | RISC AR5");
-		frame.setSize(650, 500);
+		// Whole window
+		frame = new JFrame ("Processor Simulator (RISC AR5)");
+		frame.setSize(600, 350);
 		frame.getContentPane().add(mainPanel);
 		frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible (true);
 
 
-		/// After creating GUI, a Control Unit object is created
-		final ControlUnit cu = new ControlUnit("HH_test1.txt");
+		final ControlUnit controlUnit = new ControlUnit("HH_test1.txt");
 
 		updateMemory();
 
-
-		// Action Listener for 'step' button
 		step.addActionListener(new ActionListener() {
 
 			//Execute when button is pressed
-			public void actionPerformed(ActionEvent e)
-			{
-				cu.stepMode();
+			public void actionPerformed(ActionEvent e) {
+				controlUnit.stepMode();
 				memoryArea.setText("");
 				updateMemory();
 
-				for(int i = 0; i < cu.getValues().length; i++)
-					jtcomp[i].setText(cu.getValues()[i]);
+				for (int i = 0; i < controlUnit.getValues().length; i++)
+					jtcomp[i].setText(controlUnit.getValues()[i]);
 
-				if(cu.getIsStop()){
+				if (controlUnit.getIsStop()){
 					step.setEnabled(false);
 					run.setEnabled(false);
 				}
@@ -177,16 +172,16 @@ public class ProcessorSimulatorGUI{
 		run.addActionListener(new ActionListener() {
 
 			//Execute when button is pressed
-			public void actionPerformed(ActionEvent e)
-			{
-				cu.runMode();
+			public void actionPerformed(ActionEvent e) {
+				controlUnit.runMode();
 				memoryArea.setText("");
 				updateMemory();
 
-				for(int i = 0; i < cu.getValues().length; i++)
-					jtcomp[i].setText(cu.getValues()[i]);
+				for (int i = 0; i < controlUnit.getValues().length; i++) {
+					jtcomp[i].setText(controlUnit.getValues()[i]);
+				}
 
-				if(cu.stopInstruction() == true){
+				if (controlUnit.stopInstruction() == true){
 					step.setEnabled(false);
 					run.setEnabled(false);
 				}
@@ -200,19 +195,26 @@ public class ProcessorSimulatorGUI{
 	 * Updates memory.
 	 */
 	public void updateMemory(){
-		for(int i = 0; i < 256; i=i+2){
+		for (int i = 0; i < 256; i = i+2) {
 			String ihex = Integer.toHexString(i).toUpperCase();
 			String str;
-			if(ihex.length()==1)
+
+			if (ihex.length()==1) {
 				str = "0"+ihex+"\t"+ControlUnit.getMemoryArray()[i]+ControlUnit.getMemoryArray()[i+1]+"\n";
-			else if(ControlUnit.getMemoryArray()[i] == null && ControlUnit.getMemoryArray()[i + 1] == null )
+			}
+			else if(ControlUnit.getMemoryArray()[i] == null && ControlUnit.getMemoryArray()[i + 1] == null ) {
 				str = ihex+"\t"+"00"+"00"+"\n";
-			else if(ControlUnit.getMemoryArray()[i] != null && ControlUnit.getMemoryArray()[i + 1] == null )
+			}
+			else if(ControlUnit.getMemoryArray()[i] != null && ControlUnit.getMemoryArray()[i + 1] == null ) {
 				str = ihex+"\t"+ControlUnit.getMemoryArray()[i]+"00"+"\n";
-			else if(ControlUnit.getMemoryArray()[i] == null && ControlUnit.getMemoryArray()[i + 1] != null )
+			}
+			else if(ControlUnit.getMemoryArray()[i] == null && ControlUnit.getMemoryArray()[i + 1] != null ) {
 				str = ihex+"\t"+"00"+ControlUnit.getMemoryArray()[i+1]+"\n";
-			else
+			}
+			else {
 				str = ihex+"\t"+ControlUnit.getMemoryArray()[i]+ControlUnit.getMemoryArray()[i+1]+"\n";
+			}
+
 			memoryArea.append(str);
 		}
 
