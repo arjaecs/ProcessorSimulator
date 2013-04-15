@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -27,7 +26,6 @@ public class ProcessorSimulatorGUI{
 	private static JFrame frame;
 	private static JTextComponent jtcomp[];
 	private static JPanel panel[];
-	private static JTabbedPane tabbedPane;
 	private static JPanel mainPanel;
 	private static JTextArea memoryArea;
 	private static JScrollPane scrollingArea;
@@ -41,7 +39,6 @@ public class ProcessorSimulatorGUI{
 		jtcomp = new JTextComponent[14];
 		panel = new JPanel[4];
 		mainPanel = new JPanel();
-		tabbedPane = new JTabbedPane();
 		memoryArea = new JTextArea(6, 15);
 		scrollingArea = new JScrollPane(memoryArea);
 
@@ -67,37 +64,37 @@ public class ProcessorSimulatorGUI{
 		for(int i = 0 ; i <=13; i++)
 		{			
 			jtcomp[i] = new JTextField("0000000");
-			jtcomp[i].setForeground(Color.BLUE);
+			jtcomp[i].setForeground(Color.DARK_GRAY);
 			jtcomp[i].setEditable(false);
 		}
 
 		// creating panels
-		for(int k = 0; k <= 3; k++){
+		for (int k = 0; k <= 3; k++) {
 			panel[k] = new JPanel();
 		}
 
 		// Main panel
-		GridLayout mainLayout = new GridLayout(1, 2, 100, 10);
+		GridLayout mainLayout = new GridLayout(1, 2, 40, 20);
 		mainPanel.setLayout (mainLayout);
+		mainPanel.setBackground(Color.DARK_GRAY);
 
 		// Grid Layout - West of Main Panel
-		GridLayout grid1 = new GridLayout(11, 2, 1, 1);  // row, column, hgap, vgap
+		GridLayout grid1 = new GridLayout(11, 2, 0, 0);  // row, column, hgap, vgap
 		panel[0].setLayout(grid1);
+		panel[0].setBackground(Color.DARK_GRAY);
 		mainPanel.add(panel[0]);
 
 		// Border Layout
 		BorderLayout border1 = new BorderLayout();
 		panel[1].setLayout(border1);
+		panel[1].setBackground(Color.DARK_GRAY);
 		mainPanel.add(panel[1]);
 
 		// Adding a (NORTH) panel to the Main East Panel
 		GridLayout grid2 = new GridLayout(3, 2, 1 , 1);
 		panel[2].setLayout(grid2);
+		panel[2].setBackground(Color.DARK_GRAY);
 		panel[1].add(panel[2], BorderLayout.NORTH);
-
-		// Tab Pane
-		tabbedPane.addTab("RISC AR5", null, mainPanel);
-		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
 		// Main Panel Border
 		Border etched = BorderFactory.createEtchedBorder();
@@ -124,9 +121,11 @@ public class ProcessorSimulatorGUI{
 		panel[1].add(panel[3], BorderLayout.CENTER);
 		panel[3].add(jcomp[14], BorderLayout.NORTH);
 		panel[3].add(scrollingArea, BorderLayout.CENTER);
+		panel[3].setBackground(Color.DARK_GRAY);
 
 		memoryArea.setEditable(false);
-		memoryArea.setForeground(Color.BLUE);
+		memoryArea.setForeground(Color.DARK_GRAY);
+		memoryArea.setBackground(Color.WHITE);
 
 
 		// JButtons for RUN & STEP
@@ -139,14 +138,14 @@ public class ProcessorSimulatorGUI{
 
 
 		// Frame
-		frame = new JFrame ("Processor Simulator");
-		frame.setSize(800, 500);
-		frame.add(tabbedPane);
+		frame = new JFrame ("Processor Simulator | RISC AR5");
+		frame.setSize(650, 500);
+		frame.getContentPane().add(mainPanel);
 		frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible (true);
 
-		
+
 		/// After creating GUI, a Control Unit object is created
 		final ControlUnit cu = new ControlUnit("HH_test1.txt");
 
@@ -196,7 +195,7 @@ public class ProcessorSimulatorGUI{
 
 	}
 
-	
+
 	/**
 	 * Updates memory.
 	 */
