@@ -55,6 +55,11 @@ public class ProcessorSimulatorGUI{
 		textLabel[13] = new JLabel ("Display: ");
 		textLabel[14] = new JLabel ("Memory: ");
 
+		// Paint each text label white
+				for(int i = 0 ; i < textLabel.length; i++) {	
+					textLabel[i].setForeground(Color.WHITE);
+				}
+		
 		// Initializing each text field
 		for(int i = 0 ; i < textBox.length; i++) {			
 			textBox[i] = new JTextField("0000000");
