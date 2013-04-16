@@ -16,54 +16,58 @@ import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 
 
-public class AR5_GUI {
+public class AR5_GUI{
 
+    // Insert text file here!
+    final AR5 ar5 = new AR5("test.txt");
+    
     /**
      * @param args
      */
-    private static JComponent jcomp[];
+    private static JComponent textLabel[];
     private static JFrame frame;
-    private static JTextComponent jtcomp[];
+    private static JTextComponent textBox[];
     private static JPanel panel[];
     private static JPanel mainPanel;
-    private static JTextArea memoryArea;
+    private static JTextArea scrollMemoryArea;
     private static JScrollPane scrollingArea;
 
     public AR5_GUI(){
-
-        // Insert Text File Here!!!
-        final AR5 processor = new AR5("test1.txt");
-
         // Instance fields declaration
-        jcomp = new JComponent[15];
-        jtcomp = new JTextComponent[14];
+        textLabel = new JComponent[15];
+        textBox = new JTextComponent[14];
         panel = new JPanel[7];
         mainPanel = new JPanel();
-        memoryArea = new JTextArea(6, 15);
-        scrollingArea = new JScrollPane(memoryArea);
+        scrollMemoryArea = new JTextArea(6, 15);
+        scrollingArea = new JScrollPane(scrollMemoryArea);
 
         // Labels
-        jcomp[0] = new JLabel ("IR: ");
-        jcomp[1] = new JLabel ("PC: ");
-        jcomp[2] = new JLabel ("A: ");
-        jcomp[3] = new JLabel ("R0: ");
-        jcomp[4] = new JLabel ("R1: ");
-        jcomp[5] = new JLabel ("R2: ");
-        jcomp[6] = new JLabel ("R3: ");
-        jcomp[7] = new JLabel ("R4: ");
-        jcomp[8] = new JLabel ("R5: ");
-        jcomp[9] = new JLabel ("R6: ");
-        jcomp[10] = new JLabel ("R7: ");
-        jcomp[11] = new JLabel("SR: ");
-        jcomp[12] = new JLabel("Keyboard: ");
-        jcomp[13] = new JLabel("Display: ");
-        jcomp[14] = new JLabel("Memory: ");
+        textLabel[0] = new JLabel ("IR: ");
+        textLabel[1] = new JLabel ("PC: ");
+        textLabel[2] = new JLabel ("A: ");
+        textLabel[3] = new JLabel ("R0: ");
+        textLabel[4] = new JLabel ("R1: ");
+        textLabel[5] = new JLabel ("R2: ");
+        textLabel[6] = new JLabel ("R3: ");
+        textLabel[7] = new JLabel ("R4: ");
+        textLabel[8] = new JLabel ("R5: ");
+        textLabel[9] = new JLabel ("R6: ");
+        textLabel[10] = new JLabel ("R7: ");
+        textLabel[11] = new JLabel ("SR: ");
+        textLabel[12] = new JLabel ("Keyboard: ");
+        textLabel[13] = new JLabel ("Display: ");
+        textLabel[14] = new JLabel ("Memory: ");
+
+        // Paint each text label white
+        for(int i = 0 ; i < textLabel.length; i++) {
+            textLabel[i].setForeground(Color.WHITE);
+        }
 
         // Initializing each text field
-        for(int i = 0 ; i <=13; i++) {
-            jtcomp[i] = new JTextField("0000000");
-            jtcomp[i].setForeground(Color.DARK_GRAY);
-            jtcomp[i].setEditable(false);
+        for(int i = 0 ; i < textBox.length; i++) {
+            textBox[i] = new JTextField("0000000");
+            textBox[i].setForeground(Color.DARK_GRAY);
+            textBox[i].setEditable(false);
         }
 
         // Initializing each panel
@@ -100,29 +104,29 @@ public class AR5_GUI {
 
 
         // Adding each of the grid components (west)
-        for (int i = 0; i <= 10; i++){
-            panel[0].add(jcomp[i]);
-            panel[0].add(jtcomp[i]);
+        for (int i = 0; i < textBox.length; i++){
+            panel[0].add(textLabel[i]);
+            panel[0].add(textBox[i]);
         }
 
         // Adding each of the grid components (north)
-        for (int i = 11; i <=13 ; i++){
-            panel[2].add(jcomp[i]);
-            panel[2].add(jtcomp[i]);
+        for (int i = 11; i < textBox.length ; i++){
+            panel[2].add(textLabel[i]);
+            panel[2].add(textBox[i]);
         }
 
-        // Memory
+        // Memory 
         BorderLayout border2 = new BorderLayout();
         panel[3].setLayout(border2);
         panel[1].add(panel[3], BorderLayout.CENTER);
-        panel[3].add(jcomp[14], BorderLayout.NORTH);
+        panel[3].add(textLabel[14], BorderLayout.NORTH);
         panel[3].add(scrollingArea, BorderLayout.EAST);
         panel[3].add(panel[5], BorderLayout.WEST);
         panel[3].setBackground(Color.DARK_GRAY);
 
-        memoryArea.setEditable(false);
-        memoryArea.setForeground(Color.DARK_GRAY);
-        memoryArea.setBackground(Color.WHITE);
+        scrollMemoryArea.setEditable(false);
+        scrollMemoryArea.setForeground(Color.DARK_GRAY);
+        scrollMemoryArea.setBackground(Color.WHITE);
 
         final JButton run = new JButton("RUN");
         final JButton step = new JButton("STEP");
@@ -147,22 +151,20 @@ public class AR5_GUI {
         frame.setLocationRelativeTo(null);
         frame.setVisible (true);
 
-
-
         updateMemory();
 
         step.addActionListener(new ActionListener() {
 
             //Execute when button is pressed
             public void actionPerformed(ActionEvent e) {
-                processor.stepMode();
-                memoryArea.setText("");
+                ar5.stepMode();
+                scrollMemoryArea.setText("");
                 updateMemory();
 
-                for (int i = 0; i < processor.getValues().length; i++)
-                    jtcomp[i].setText(processor.getValues()[i]);
+                for (int i = 0; i < ar5.getValues().length; i++)
+                    textBox[i].setText(ar5.getValues()[i]);
 
-                if (processor.getIsStop()){
+                if (ar5.getIsStop()){
                     step.setEnabled(false);
                     run.setEnabled(false);
                 }
@@ -170,20 +172,19 @@ public class AR5_GUI {
         });
 
 
-        // Action Listener for 'run' button
         run.addActionListener(new ActionListener() {
 
             //Execute when button is pressed
             public void actionPerformed(ActionEvent e) {
-                processor.runMode();
-                memoryArea.setText("");
+                ar5.runMode();
+                scrollMemoryArea.setText("");
                 updateMemory();
 
-                for (int i = 0; i < processor.getValues().length; i++) {
-                    jtcomp[i].setText(processor.getValues()[i]);
+                for (int i = 0; i < ar5.getValues().length; i++) {
+                    textBox[i].setText(ar5.getValues()[i]);
                 }
 
-                if (processor.stopInstruction() == true){
+                if (ar5.stopInstruction() == true){
                     step.setEnabled(false);
                     run.setEnabled(false);
                 }
@@ -202,25 +203,26 @@ public class AR5_GUI {
             String str;
 
             if (ihex.length()==1) {
-                str = "0"+ihex+"\t"+ AR5.getMemory()[i]+ AR5.getMemory()[i+1]+"\n";
+                str = "0"+ihex+"\t"+AR5.getMemory()[i]+AR5.getMemory()[i+1]+"\n";
             }
             else if(AR5.getMemory()[i] == null && AR5.getMemory()[i + 1] == null ) {
                 str = ihex+"\t"+"00"+"00"+"\n";
             }
             else if(AR5.getMemory()[i] != null && AR5.getMemory()[i + 1] == null ) {
-                str = ihex+"\t"+ AR5.getMemory()[i]+"00"+"\n";
+                str = ihex+"\t"+AR5.getMemory()[i]+"00"+"\n";
             }
             else if(AR5.getMemory()[i] == null && AR5.getMemory()[i + 1] != null ) {
-                str = ihex+"\t"+"00"+ AR5.getMemory()[i+1]+"\n";
+                str = ihex+"\t"+"00"+AR5.getMemory()[i+1]+"\n";
             }
             else {
-                str = ihex+"\t"+ AR5.getMemory()[i]+ AR5.getMemory()[i+1]+"\n";
+                str = ihex+"\t"+AR5.getMemory()[i]+AR5.getMemory()[i+1]+"\n";
             }
 
-            memoryArea.append(str);
+            scrollMemoryArea.append(str);
         }
 
     }
 }
+
 
 
