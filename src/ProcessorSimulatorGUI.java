@@ -3,7 +3,6 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -22,45 +21,45 @@ public class ProcessorSimulatorGUI{
 	/**
 	 * @param args
 	 */
-	private static JComponent jcomp[];
+	private static JComponent textLabel[];
 	private static JFrame frame;
-	private static JTextComponent jtcomp[];
+	private static JTextComponent textBox[];
 	private static JPanel panel[];
 	private static JPanel mainPanel;
-	private static JTextArea memoryArea;
+	private static JTextArea scrollMemoryArea;
 	private static JScrollPane scrollingArea;
 
 	public ProcessorSimulatorGUI(){
 		// Instance fields declaration
-		jcomp = new JComponent[15];
-		jtcomp = new JTextComponent[14];
+		textLabel = new JComponent[15];
+		textBox = new JTextComponent[14];
 		panel = new JPanel[7];
 		mainPanel = new JPanel();
-		memoryArea = new JTextArea(6, 15);
-		scrollingArea = new JScrollPane(memoryArea);
+		scrollMemoryArea = new JTextArea(6, 15);
+		scrollingArea = new JScrollPane(scrollMemoryArea);
 
 		// Labels
-		jcomp[0] = new JLabel ("IR: ");
-		jcomp[1] = new JLabel ("PC: ");
-		jcomp[2] = new JLabel ("A: ");
-		jcomp[3] = new JLabel ("R0: ");
-		jcomp[4] = new JLabel ("R1: ");
-		jcomp[5] = new JLabel ("R2: ");
-		jcomp[6] = new JLabel ("R3: ");
-		jcomp[7] = new JLabel ("R4: ");
-		jcomp[8] = new JLabel ("R5: ");
-		jcomp[9] = new JLabel ("R6: ");
-		jcomp[10] = new JLabel ("R7: ");
-		jcomp[11] = new JLabel("SR: ");
-		jcomp[12] = new JLabel("Keyboard: ");
-		jcomp[13] = new JLabel("Display: ");
-		jcomp[14] = new JLabel("Memory: ");
+		textLabel[0] = new JLabel ("IR: ");
+		textLabel[1] = new JLabel ("PC: ");
+		textLabel[2] = new JLabel ("A: ");
+		textLabel[3] = new JLabel ("R0: ");
+		textLabel[4] = new JLabel ("R1: ");
+		textLabel[5] = new JLabel ("R2: ");
+		textLabel[6] = new JLabel ("R3: ");
+		textLabel[7] = new JLabel ("R4: ");
+		textLabel[8] = new JLabel ("R5: ");
+		textLabel[9] = new JLabel ("R6: ");
+		textLabel[10] = new JLabel ("R7: ");
+		textLabel[11] = new JLabel ("SR: ");
+		textLabel[12] = new JLabel ("Keyboard: ");
+		textLabel[13] = new JLabel ("Display: ");
+		textLabel[14] = new JLabel ("Memory: ");
 
 		// Initializing each text field
-		for(int i = 0 ; i <=13; i++) {			
-			jtcomp[i] = new JTextField("0000000");
-			jtcomp[i].setForeground(Color.DARK_GRAY);
-			jtcomp[i].setEditable(false);
+		for(int i = 0 ; i < textBox.length; i++) {			
+			textBox[i] = new JTextField("0000000");
+			textBox[i].setForeground(Color.DARK_GRAY);
+			textBox[i].setEditable(false);
 		}
 
 		// Initializing each panel
@@ -97,29 +96,29 @@ public class ProcessorSimulatorGUI{
 
 
 		// Adding each of the grid components (west)
-		for (int i = 0; i <= 10; i++){
-			panel[0].add(jcomp[i]);
-			panel[0].add(jtcomp[i]);
+		for (int i = 0; i < textBox.length; i++){
+			panel[0].add(textLabel[i]);
+			panel[0].add(textBox[i]);
 		}
 
 		// Adding each of the grid components (north)
-		for (int i = 11; i <=13 ; i++){
-			panel[2].add(jcomp[i]);
-			panel[2].add(jtcomp[i]);
+		for (int i = 11; i < textBox.length ; i++){
+			panel[2].add(textLabel[i]);
+			panel[2].add(textBox[i]);
 		}
 
 		// Memory 
 		BorderLayout border2 = new BorderLayout();
 		panel[3].setLayout(border2);
 		panel[1].add(panel[3], BorderLayout.CENTER);
-		panel[3].add(jcomp[14], BorderLayout.NORTH);
+		panel[3].add(textLabel[14], BorderLayout.NORTH);
 		panel[3].add(scrollingArea, BorderLayout.EAST);
 		panel[3].add(panel[5], BorderLayout.WEST);
 		panel[3].setBackground(Color.DARK_GRAY);
 
-		memoryArea.setEditable(false);
-		memoryArea.setForeground(Color.DARK_GRAY);
-		memoryArea.setBackground(Color.WHITE);
+		scrollMemoryArea.setEditable(false);
+		scrollMemoryArea.setForeground(Color.DARK_GRAY);
+		scrollMemoryArea.setBackground(Color.WHITE);
 
 		final JButton run = new JButton("RUN");
 		final JButton step = new JButton("STEP");
@@ -154,11 +153,11 @@ public class ProcessorSimulatorGUI{
 			//Execute when button is pressed
 			public void actionPerformed(ActionEvent e) {
 				controlUnit.stepMode();
-				memoryArea.setText("");
+				scrollMemoryArea.setText("");
 				updateMemory();
 
 				for (int i = 0; i < controlUnit.getValues().length; i++)
-					jtcomp[i].setText(controlUnit.getValues()[i]);
+					textBox[i].setText(controlUnit.getValues()[i]);
 
 				if (controlUnit.getIsStop()){
 					step.setEnabled(false);
@@ -168,17 +167,16 @@ public class ProcessorSimulatorGUI{
 		});    
 
 
-		// Action Listener for 'run' button
 		run.addActionListener(new ActionListener() {
 
 			//Execute when button is pressed
 			public void actionPerformed(ActionEvent e) {
 				controlUnit.runMode();
-				memoryArea.setText("");
+				scrollMemoryArea.setText("");
 				updateMemory();
 
 				for (int i = 0; i < controlUnit.getValues().length; i++) {
-					jtcomp[i].setText(controlUnit.getValues()[i]);
+					textBox[i].setText(controlUnit.getValues()[i]);
 				}
 
 				if (controlUnit.stopInstruction() == true){
@@ -215,7 +213,7 @@ public class ProcessorSimulatorGUI{
 				str = ihex+"\t"+ControlUnit.getMemoryArray()[i]+ControlUnit.getMemoryArray()[i+1]+"\n";
 			}
 
-			memoryArea.append(str);
+			scrollMemoryArea.append(str);
 		}
 
 	}
