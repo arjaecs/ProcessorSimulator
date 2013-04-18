@@ -224,20 +224,30 @@ public class AR5 {
         if (sum < 0) {
             binarySum = binarySum.substring(24, 32);
 
-            if (sum < -128)
+            if (sum < -128) {
                 statusRegister[3] = 1; //Overflow
-            else
+                //statusRegister[1] = 1; //Carry
+            }
+            else {
                 statusRegister[3] = 0; //Overflow
+                //statusRegister[1] = 0; //Carry
+            }
 
             if (binarySum.substring(0, 1).equals("1"))
                 statusRegister[2] = 1; //Negative
 
         }
         else {
-            if (sum > 127)
+            if (sum > 127) {
+                //statusRegister[1] = 1; //Carry
                 statusRegister[3] = 1; //Overflow
-            else
-                statusRegister[3] = 0;
+            }
+
+            else {
+                //statusRegister[1] = 0; //No Carry
+                statusRegister[3] = 0; //No Overflow
+
+            }
 
         }
 
@@ -343,19 +353,26 @@ public class AR5 {
 
         int registerDec = decimalConverter(registerBin,2);
         String registerContent = register[registerDec];
-        String operand1 = registerContent.substring(4,8);
-        String operand2 = accumulator.substring(4,8);
 
-        if (operand1.substring(0, 1).equals("1"))
-            registerNumber = -8 + decimalConverter(operand1.substring(1, 4),2);
-        else
-            registerNumber = decimalConverter(operand1,2);
+        String registerOperator = registerContent.substring(4,8);
+        String accOperator = accumulator.substring(4,8);
+
+        ///--------------------------------------------------------------------------------------------
+        // Decomment this if Nayda meant for the least significant byte
+        // to determine the sign at the moment of multiplication
+        ///--------------------------------------------------------------------------------------------
 
 
-        if (operand2.substring(0, 1).equals("1"))
-            accumulatorNumber = -8 + decimalConverter(operand2.substring(1, 4),2);
-        else
-            accumulatorNumber = decimalConverter(operand2,2);
+//        if (registerOperator.substring(0, 1).equals("1"))
+//            registerNumber = -8 + decimalConverter(registerOperator.substring(1, 4),2);
+//        else
+            registerNumber = decimalConverter(registerOperator,2);
+
+//
+//        if (accOperator.substring(0, 1).equals("1"))
+//            accumulatorNumber = -8 + decimalConverter(accOperator.substring(1, 4),2);
+//        else
+            accumulatorNumber = decimalConverter(accOperator,2);
 
 
         // Multiplication
@@ -549,6 +566,8 @@ public class AR5 {
             addressContent = ""+j;
             accumulator = binaryConverter(addressContent,10);
             keyboard = ""+keyboardInput;
+            //
+            memory[memoryIndex] = hexConverter(accumulator,2).toUpperCase();
 
         }
 
@@ -570,7 +589,13 @@ public class AR5 {
     public void staInstruction(){
         String memoryBin = instructionRegister.substring(8, instructionRegister.length());
         int memoryIndex = decimalConverter(memoryBin, 2);
-        memory[memoryIndex] = hexConverter(accumulator, 2).toUpperCase();
+        //memory[memoryIndex] = hexConverter(accumulator, 2).toUpperCase();
+        String tempMemory = hexConverter(accumulator, 2).toUpperCase();
+
+        if(tempMemory.length()<2){
+            tempMemory= "0"+tempMemory;
+        }
+        memory[memoryIndex]=tempMemory;
         programCounter = programCounter + 2;
 
         if(memoryIndex == 252)
@@ -604,8 +629,10 @@ public class AR5 {
      * Branch if Zero
      */
     public void brzInstruction(){
-        if(statusRegister[0] == 1)
+        if(statusRegister[0] == 1)  {
             programCounter = decimalConverter(register[7], 2);
+            statusRegister[0] = 0;
+        }
         else
             programCounter = programCounter + 2;
     }
@@ -688,7 +715,7 @@ public class AR5 {
      */
     public void updateStatusRegister(){
 
-        clearStatusRegister();
+        //clearStatusRegister();
         if(accumulator.equals("00000000"))
             statusRegister[0] = 1;
         if(accumulator.startsWith("1"))
