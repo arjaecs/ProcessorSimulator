@@ -64,11 +64,23 @@ public class AR5_GUI{
         }
 
         // Initializing each text field
-        for(int i = 0 ; i < textBox.length; i++) {
+        for(int i = 0 ; i < 11; i++) {
             textBox[i] = new JTextField("0000000");
             textBox[i].setForeground(Color.DARK_GRAY);
             textBox[i].setEditable(false);
         }
+        textBox[11] = new JTextField("0000");
+        textBox[11].setForeground(Color.DARK_GRAY);
+        textBox[11].setEditable(false);
+
+        textBox[12] = new JTextField("0000000");
+        textBox[12].setForeground(Color.DARK_GRAY);
+        textBox[12].setEditable(false);
+
+        textBox[13] = new JTextField("0000000");
+        textBox[13].setForeground(Color.DARK_GRAY);
+        textBox[13].setEditable(false);
+        
 
         // Initializing each panel
         for (int i = 0; i < panel.length; i++) {
